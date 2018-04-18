@@ -1,0 +1,38 @@
+#!/usr/bin/sudo bash
+case "$1" in
+        start)
+            cd /usr/lib/AccessTalks/
+	    node Serveur.js > /var/log/AccessTalks/accesstalks.log 2> /var/log/AccessTalks/error.log &
+	    ;;
+         
+        stop)
+	    if  pgrep -x "accesstalks dae" > /dev/null
+	    then 
+            	pkill accesstalks
+	    fi
+            ;;
+         
+        status)
+            if  pgrep -x "accesstalks dae" > /dev/null
+	    then 
+		echo "AccessTalk's is running"
+	    else 
+		echo "AccessTalk's is stopped"
+	    fi
+            ;;
+        restart)
+            stop
+            start
+            ;;
+        condrestart)
+            if test "x`pidof anacron`" != x; then
+                stop
+                start
+            fi
+            ;;
+         
+        *)
+            cd /usr/lib/AccessTalks/
+	    node Serveur.js > /var/log/AccessTalks/accesstalks.log 2> /var/log/AccessTalks/error.log &
+ 
+esac
